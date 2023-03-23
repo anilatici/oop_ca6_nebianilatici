@@ -7,7 +7,7 @@ import java.util.List;
 public interface TeamDaoInterface
 {
     List<Team> findAllTeams() throws DaoException;
-    Team findTeamByName(String name) throws DaoException;
-    List<Team> findTeamsByCountry(String country) throws DaoException;
-    List<Team> findTeamsByPowerUnit(String powerUnit) throws DaoException;
+    Team findTeamByName() throws DaoException;
+    List<Team> findTeamsByCountry() throws DaoException;
+    List<Team> findTeamsByPowerUnit() throws DaoException;
 }

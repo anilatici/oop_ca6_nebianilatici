@@ -4,28 +4,70 @@ import com.dkit.oop.DAOs.MySqlTeamDao;
 import com.dkit.oop.DAOs.TeamDaoInterface;
 import com.dkit.oop.DTOs.Team;
 import com.dkit.oop.Exceptions.DaoException;
+import com.sun.tools.jdeprscan.scan.Scan;
+
 import java.util.List;
+import java.util.Scanner;
 
 public class App
 {
+    private static void menuPrint()
+    {
+        System.out.println("Welcome to Formula 1");
+        System.out.println("-----------------------------");
+        System.out.println("1) Display All Teams");
+        System.out.println("2) Find Team By Name");
+        System.out.println("3) Find Teams By Country");
+        System.out.println("4) Find Teams By Power Unit");
+        System.out.println("5) Exit");
+        System.out.println("-----------------------------");
+        System.out.println("Enter the number of the option you want to select:");
+
+    }
     public static void main(String[] args)
     {
+        Scanner kb = new Scanner(System.in);
         TeamDaoInterface ITeamDao = new MySqlTeamDao();
+        boolean menuLoop = true;
+        int menuOption;
 
         try
         {
-/*            System.out.println("\nCall findAllTeams()");
-            List<Team> teams = ITeamDao.findAllTeams();     // call a method in the DAO*/
-/*            System.out.println("\nCall findTeamByName(String name)");
-            Team t = ITeamDao.findTeamByName("williams");
-            System.out.println(t);*/
-/*            System.out.println("\nCall findTeamsByCountry(String country)");
-            List<Team> teams = ITeamDao.findTeamsByCountry("united kingdom");
-            System.out.println(teams);*/
-            System.out.println("\nCall findTeamsByPowerUnit(String powerUnit)");
-            List<Team> teams = ITeamDao.findTeamsByPowerUnit("haas");
-            System.out.println(teams);
+            while (menuLoop) {
+                menuPrint();
+                menuOption = kb.nextInt();
+                kb.nextLine();
 
+                switch (menuOption) {
+                    case 1:
+                        System.out.println("Displaying All Teams");
+                        List<Team> teamsAll = ITeamDao.findAllTeams();
+                        System.out.println(teamsAll+"\n");
+                        break;
+
+                    case 2:
+                        System.out.println("Displaying Team By Name");
+                        Team t = ITeamDao.findTeamByName();
+                        System.out.println(t+"\n");
+                        break;
+
+                    case 3:
+                        System.out.println("Displaying Teams By Country");
+                        List<Team> teamsByCountry = ITeamDao.findTeamsByCountry();
+                        System.out.println(teamsByCountry+"\n");
+                        break;
+
+                    case 4:
+                        System.out.println("Displaying Teams By Power Unit");
+                        List<Team> teamsByPowerUnit = ITeamDao.findTeamsByPowerUnit();
+                        System.out.println(teamsByPowerUnit+"\n");
+                        break;
+
+                    case 5:
+                        menuLoop = false;
+                        break;
+                }
+            }
 /*            if(teams.isEmpty() )
                 System.out.println("There are no Teams");
             else {

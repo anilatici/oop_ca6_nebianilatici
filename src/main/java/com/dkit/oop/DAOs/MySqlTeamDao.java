@@ -14,6 +14,7 @@ import java.util.Scanner;
 
 
 public class MySqlTeamDao extends MySqlDao implements TeamDaoInterface {
+    Scanner kb = new Scanner(System.in);
 
     @Override
     public List<Team> findAllTeams() throws DaoException {
@@ -69,10 +70,12 @@ public class MySqlTeamDao extends MySqlDao implements TeamDaoInterface {
     }
 
     @Override
-    public Team findTeamByName(String teamName) throws DaoException {
+    public Team findTeamByName() throws DaoException {
         Connection connection = null;
         PreparedStatement ps = null;
         ResultSet resultSet = null;
+        System.out.println("Enter team name:");
+        String teamName = kb.nextLine();
         Team t = null;
         try {
             connection = this.getConnection();
@@ -111,10 +114,12 @@ public class MySqlTeamDao extends MySqlDao implements TeamDaoInterface {
     }
 
     @Override
-    public List<Team> findTeamsByCountry(String teamCountry) throws DaoException {
+    public List<Team> findTeamsByCountry() throws DaoException {
         Connection connection = null;
         PreparedStatement ps = null;
         ResultSet resultSet = null;
+        System.out.println("Enter country:");
+        String teamCountry = kb.nextLine();
         List<Team> teamsList = new ArrayList<>();
         try
         {
@@ -164,10 +169,12 @@ public class MySqlTeamDao extends MySqlDao implements TeamDaoInterface {
     }
 
     @Override
-    public List<Team> findTeamsByPowerUnit(String teamPowerUnit) throws DaoException {
+    public List<Team> findTeamsByPowerUnit() throws DaoException {
         Connection connection = null;
         PreparedStatement ps = null;
         ResultSet resultSet = null;
+        System.out.println("Enter power unit:");
+        String teamPowerUnit = kb.nextLine();
         List<Team> teamsList = new ArrayList<>();
         try
         {
