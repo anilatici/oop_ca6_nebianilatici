@@ -19,7 +19,9 @@ public class App
         System.out.println("2) Find Team By Name");
         System.out.println("3) Find Teams By Country");
         System.out.println("4) Find Teams By Power Unit");
-        System.out.println("5) Exit");
+        System.out.println("5) Find Teams Over Budget");
+        System.out.println("6) Find Teams Under Budget");
+        System.out.println("7) Exit");
         System.out.println("-----------------------------");
         System.out.println("Enter the number of the option you want to select:");
 
@@ -64,6 +66,19 @@ public class App
                         break;
 
                     case 5:
+                        System.out.println("Displaying Teams Over Budget");
+                        List<Team> teamsOverBudget = ITeamDao.findTeamsOverBudget();
+                        System.out.println(teamsOverBudget+"\n");
+                        break;
+
+                    case 6:
+                        System.out.println("Displaying Teams Under Budget");
+                        List<Team> teamsUnderBudget = ITeamDao.findTeamsUnderBudget();
+                        System.out.println(teamsUnderBudget+"\n");
+                        break;
+
+
+                    case 7:
                         menuLoop = false;
                         break;
                 }
