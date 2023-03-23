@@ -21,11 +21,34 @@ public class App
         System.out.println("4) Find Teams By Power Unit");
         System.out.println("5) Find Teams Over Budget");
         System.out.println("6) Find Teams Under Budget");
-        System.out.println("7) Exit");
+        System.out.println("7) Find Teams Over Wins");
+        System.out.println("8) Exit");
         System.out.println("-----------------------------");
         System.out.println("Enter the number of the option you want to select:");
 
     }
+
+    private static int menuValidation()
+    {
+        Scanner kb = new Scanner(System.in);
+        int menuOption = 0;
+        boolean validInput = false;
+        while (!validInput) {
+            if (kb.hasNextInt()) {
+                menuOption = kb.nextInt();
+                if (menuOption >= 1 && menuOption <= 8) {
+                    validInput = true;
+                } else {
+                    System.out.println("Invalid input. Please enter an integer between 1 and 8.");
+                }
+            } else {
+                System.out.println("Invalid input. Please enter an integer.");
+                kb.next(); // consume the invalid input
+            }
+        }
+        return menuOption;
+    }
+
     public static void main(String[] args)
     {
         Scanner kb = new Scanner(System.in);
@@ -37,10 +60,20 @@ public class App
         {
             while (menuLoop) {
                 menuPrint();
+                while (!kb.hasNextInt()) {
+                    System.out.println("Invalid input, please enter a number");
+                    kb.nextLine();
+                }
                 menuOption = kb.nextInt();
                 kb.nextLine();
+                if (menuOption < 1 || menuOption > 8) {
+                    System.out.println("Invalid option, please try again");
+                    continue;
+                }
 
                 switch (menuOption) {
+
+
                     case 1:
                         System.out.println("Displaying All Teams");
                         List<Team> teamsAll = ITeamDao.findAllTeams();
@@ -77,9 +110,18 @@ public class App
                         System.out.println(teamsUnderBudget+"\n");
                         break;
 
-
                     case 7:
+                        System.out.println("Displaying Teams Over Wins");
+                        List<Team> teamsOverWins = ITeamDao.findTeamsOverWins();
+                        System.out.println(teamsOverWins+"\n");
+                        break;
+
+                    case 8:
                         menuLoop = false;
+                        break;
+
+                    default:
+                        System.out.println("Invalid option, please try again");
                         break;
                 }
             }

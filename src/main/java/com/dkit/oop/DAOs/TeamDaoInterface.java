@@ -12,5 +12,6 @@ public interface TeamDaoInterface
     List<Team> findTeamsByPowerUnit() throws DaoException;
     List<Team> findTeamsOverBudget() throws DaoException;
     List<Team> findTeamsUnderBudget() throws DaoException;
+    List<Team> findTeamsOverWins() throws DaoException;
 
 }
