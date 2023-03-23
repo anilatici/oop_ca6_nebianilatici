@@ -11,26 +11,13 @@ import java.util.Scanner;
 
 public class App
 {
-    private static void menuPrint()
-    {
-        System.out.println("Welcome to Formula 1");
-        System.out.println("-----------------------------");
-        System.out.println("1) Display All Teams");
-        System.out.println("2) Find Team By Name");
-        System.out.println("3) Find Teams By Country");
-        System.out.println("4) Find Teams By Power Unit");
-        System.out.println("5) Find Teams Over Budget");
-        System.out.println("6) Find Teams Under Budget");
-        System.out.println("7) Find Teams Over Wins");
-        System.out.println("8) Find Teams Under Wins");
-        System.out.println("9) Exit");
-        System.out.println("-----------------------------");
-        System.out.println("Enter the number of the option you want to select:");
-
-    }
-
     public static void main(String[] args)
     {
+        App app = new App();
+        start();
+    }
+
+    private static void start() {
         Scanner kb = new Scanner(System.in);
         TeamDaoInterface ITeamDao = new MySqlTeamDao();
         boolean menuLoop = true;
@@ -55,9 +42,7 @@ public class App
 
 
                     case 1:
-                        System.out.println("Displaying All Teams");
-                        List<Team> teamsAll = ITeamDao.findAllTeams();
-                        System.out.println(teamsAll+"\n");
+                        menuDisplayOptions();
                         break;
 
                     case 2:
@@ -122,4 +107,112 @@ public class App
             e.printStackTrace();
         }
     }
+
+    private static void menuPrint()
+    {
+        System.out.println("Welcome to Formula 1");
+        System.out.println("-----------------------------");
+        System.out.println("1) Display Options");
+        System.out.println("9) Exit");
+        System.out.println("-----------------------------");
+        System.out.println("Enter the number of the option you want to select:");
+
+    }
+    public static void menuDisplayOptions ()
+    {
+        boolean menuLoop = true;
+        Scanner kb = new Scanner(System.in);
+        TeamDaoInterface ITeamDao = new MySqlTeamDao();
+        int displayOption = 0;
+        try{
+            while (menuLoop) {
+                System.out.println("Display Options:");
+                System.out.println("1) Display All Teams");
+                System.out.println("2) Find Team By Name");
+                System.out.println("3) Find Teams By Country");
+                System.out.println("4) Find Teams By Power Unit");
+                System.out.println("5) Find Teams Over Budget");
+                System.out.println("6) Find Teams Under Budget");
+                System.out.println("7) Find Teams Over Wins");
+                System.out.println("8) Find Teams Under Wins");
+                System.out.println("9) Return to Main Menu");
+                System.out.println("Enter the number of the option you want to select:");
+                while (!kb.hasNextInt()) {
+                    System.out.println("Invalid input, please enter a number");
+                    kb.nextLine();
+                }
+                displayOption = kb.nextInt();
+
+                if (displayOption < 1 || displayOption > 9) {
+                    System.out.println("Invalid option, please try again");
+                    continue;
+                }
+
+                kb.nextLine(); // consume the newline
+                switch (displayOption) {
+                    case 1:
+                        System.out.println("Displaying All Teams");
+                        List<Team> teamsAll = ITeamDao.findAllTeams();
+                        System.out.println(teamsAll + "\n");
+                        break;
+
+                    case 2:
+                        System.out.println("Displaying Team By Name");
+                        Team t = ITeamDao.findTeamByName();
+                        System.out.println(t + "\n");
+                        break;
+
+                    case 3:
+                        System.out.println("Displaying Teams By Country");
+                        List<Team> teamsByCountry = ITeamDao.findTeamsByCountry();
+                        System.out.println(teamsByCountry + "\n");
+                        break;
+
+                    case 4:
+                        System.out.println("Displaying Teams By Power Unit");
+                        List<Team> teamsByPowerUnit = ITeamDao.findTeamsByPowerUnit();
+                        System.out.println(teamsByPowerUnit + "\n");
+                        break;
+
+                    case 5:
+                        System.out.println("Displaying Teams Over Budget");
+                        List<Team> teamsOverBudget = ITeamDao.findTeamsOverBudget();
+                        System.out.println(teamsOverBudget + "\n");
+                        break;
+
+                    case 6:
+                        System.out.println("Displaying Teams Under Budget");
+                        List<Team> teamsUnderBudget = ITeamDao.findTeamsUnderBudget();
+                        System.out.println(teamsUnderBudget + "\n");
+                        break;
+
+                    case 7:
+                        System.out.println("Displaying Teams Over Wins");
+                        List<Team> teamsOverWins = ITeamDao.findTeamsOverWins();
+                        System.out.println(teamsOverWins + "\n");
+                        break;
+
+                    case 8:
+                        System.out.println("Displaying Teams Under Wins");
+                        List<Team> teamsUnderWins = ITeamDao.findTeamsUnderWins();
+                        System.out.println(teamsUnderWins + "\n");
+                        break;
+
+                    case 9:
+                        System.out.println("Returning to Main Menu");
+                        menuLoop = false;
+                        break;
+
+                    default:
+                        System.out.println("Invalid option, please try again");
+                        break;
+                }
+            }
+        }
+        catch (DaoException e)
+        {
+            System.out.println(e.getMessage());
+        }
+    }
 }
+

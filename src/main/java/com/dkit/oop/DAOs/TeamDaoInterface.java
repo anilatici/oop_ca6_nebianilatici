@@ -14,5 +14,6 @@ public interface TeamDaoInterface
     List<Team> findTeamsUnderBudget() throws DaoException;
     List<Team> findTeamsOverWins() throws DaoException;
     List<Team> findTeamsUnderWins() throws DaoException;
+    void deleteTeamByName() throws DaoException;
 
 }

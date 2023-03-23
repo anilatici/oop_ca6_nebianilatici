@@ -437,5 +437,45 @@ public class MySqlTeamDao extends MySqlDao implements TeamDaoInterface {
         return teamsList;
     }
 
+    @Override
+    public void deleteTeamByName() throws DaoException {
+        System.out.println("Enter team name: ");
+        String teamName = kb.next();
+        try
+        {
+            connection = this.getConnection();
+
+            String query = "delete from teams where name = ?";
+            ps = connection.prepareStatement(query);
+            ps.setString(1, teamName);
+
+            //Using a PreparedStatement to execute SQL...
+            ps.executeUpdate();
+        } catch (SQLException e)
+        {
+            throw new DaoException("deleteTeamByNameResultSet() " + e.getMessage());
+        } finally
+        {
+            try
+            {
+                if (resultSet != null)
+                {
+                    resultSet.close();
+                }
+                if (ps != null)
+                {
+                    ps.close();
+                }
+                if (connection != null)
+                {
+                    freeConnection(connection);
+                }
+            } catch (SQLException e)
+            {
+                throw new DaoException("deleteTeamByName() " + e.getMessage());
+            }
+        }
+    }
+
 
 }
