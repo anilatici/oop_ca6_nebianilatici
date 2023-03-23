@@ -88,6 +88,6 @@ public class Team {
                 ", powerUnit='" + powerUnit + '\'' +
                 ", wins=" + wins +
                 ", budget=" + budget +
-                '}';
+                '}' +"\n";
     }
 }

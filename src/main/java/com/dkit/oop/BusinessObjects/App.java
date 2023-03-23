@@ -16,9 +16,12 @@ public class App
         {
 /*            System.out.println("\nCall findAllTeams()");
             List<Team> teams = ITeamDao.findAllTeams();     // call a method in the DAO*/
-            System.out.println("\nCall findTeamByName()");
+/*            System.out.println("\nCall findTeamByName(String name)");
             Team t = ITeamDao.findTeamByName("williams");
-            System.out.println(t);
+            System.out.println(t);*/
+            System.out.println("\nCall findTeamsByCountry(String country)");
+            List<Team> teams = ITeamDao.findTeamsByCountry("united kingdom");
+            System.out.println(teams);
 
 /*            if(teams.isEmpty() )
                 System.out.println("There are no Teams");
