@@ -1,14 +1,16 @@
 package com.dkit.oop.DAOs;
 
-import com.dkit.oop.DAOs.MySqlDao;
 import com.dkit.oop.DTOs.Team;
 import com.dkit.oop.Exceptions.DaoException;
+import com.sun.tools.jdeprscan.scan.Scan;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 
 public class MySqlTeamDao extends MySqlDao implements TeamDaoInterface {
@@ -65,4 +67,47 @@ public class MySqlTeamDao extends MySqlDao implements TeamDaoInterface {
         }
         return teamsList;     // may be empty
     }
+
+    @Override
+    public Team findTeamByName(String teamName) throws DaoException {
+        Connection connection = null;
+        PreparedStatement ps = null;
+        ResultSet resultSet = null;
+        Team t = null;
+        try {
+            connection = this.getConnection();
+            String query = "select * from teams where name like '%" + teamName + "%'";
+            ps = connection.prepareStatement(query);
+
+            //Using a PreparedStatement to execute SQL...
+            resultSet = ps.executeQuery();
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                String country = resultSet.getString("country");
+                String powerUnit = resultSet.getString("powerUnit");
+                int wins = resultSet.getInt("wins");
+                float budget = resultSet.getFloat("budget");
+                t = new Team(id, name, country, powerUnit, wins, budget);
+            }
+        } catch (SQLException e) {
+            throw new DaoException("findTeamByNameResultSet() " + e.getMessage());
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (connection != null) {
+                    freeConnection(connection);
+                }
+            } catch (SQLException e) {
+                throw new DaoException("findTeamByName() " + e.getMessage());
+            }
+        }
+        return t;
+    }
+
 }

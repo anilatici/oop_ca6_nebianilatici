@@ -14,15 +14,18 @@ public class App
 
         try
         {
-            System.out.println("\nCall findAllTeams()");
-            List<Team> teams = ITeamDao.findAllTeams();     // call a method in the DAO
+/*            System.out.println("\nCall findAllTeams()");
+            List<Team> teams = ITeamDao.findAllTeams();     // call a method in the DAO*/
+            System.out.println("\nCall findTeamByName()");
+            Team t = ITeamDao.findTeamByName("williams");
+            System.out.println(t);
 
-            if(teams.isEmpty() )
+/*            if(teams.isEmpty() )
                 System.out.println("There are no Teams");
             else {
                 for (Team team : teams)
                     System.out.println("Team: " + team.toString());
-            }
+            }*/
         }
         catch( DaoException e )
         {
