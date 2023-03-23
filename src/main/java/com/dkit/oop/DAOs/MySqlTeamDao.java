@@ -71,6 +71,46 @@ public class MySqlTeamDao extends MySqlDao implements TeamDaoInterface {
     }
 
     @Override
+    public Team findTeamById() throws DaoException {
+        System.out.println("Enter team ID:");
+        int teamID = kb.nextInt();
+        Team t = null;
+        try {
+            connection = this.getConnection();
+            String query = "select * from teams where id = " + teamID;
+            ps = connection.prepareStatement(query);
+
+            //Using a PreparedStatement to execute SQL...
+            resultSet = ps.executeQuery();
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                String country = resultSet.getString("country");
+                String powerUnit = resultSet.getString("powerUnit");
+                int wins = resultSet.getInt("wins");
+                float budget = resultSet.getFloat("budget");
+                t = new Team(id, name, country, powerUnit, wins, budget);
+            }
+        } catch (SQLException e) {
+            throw new DaoException("findTeamByIDResultSet() " + e.getMessage());
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (connection != null) {
+                    freeConnection(connection);
+                }
+            } catch (SQLException e) {
+                throw new DaoException("findTeamByID() " + e.getMessage());
+            }
+        }
+        return t;
+    }
+    @Override
     public Team findTeamByName() throws DaoException {
         System.out.println("Enter team name:");
         String teamName = kb.nextLine();
@@ -437,9 +477,55 @@ public class MySqlTeamDao extends MySqlDao implements TeamDaoInterface {
         return teamsList;
     }
 
+
+    //create a function to delete a team from the database table using the team id
+    @Override
+    public void deleteTeamById() throws DaoException {
+        System.out.println("Enter team ID again to confirm: ");
+        while (!kb.hasNextInt()) { //check if input is an int
+            System.out.println("Invalid input, please enter a number");
+            kb.next();
+        }
+        int teamId = kb.nextInt();
+        try
+        {
+            connection = this.getConnection();
+
+            String query = "delete from teams where id = ?";
+            ps = connection.prepareStatement(query);
+            ps.setInt(1, teamId);
+
+            //Using a PreparedStatement to execute SQL...
+            ps.executeUpdate();
+        } catch (SQLException e)
+        {
+            throw new DaoException("deleteTeamByIdResultSet() " + e.getMessage());
+        } finally
+        {
+            try
+            {
+                if (resultSet != null)
+                {
+                    resultSet.close();
+                }
+                if (ps != null)
+                {
+                    ps.close();
+                }
+                if (connection != null)
+                {
+                    freeConnection(connection);
+                }
+            } catch (SQLException e)
+            {
+                throw new DaoException("deleteTeamById() " + e.getMessage());
+            }
+        }
+    }
+
     @Override
     public void deleteTeamByName() throws DaoException {
-        System.out.println("Enter team name: ");
+        System.out.println("Enter team name again to confirm: ");
         String teamName = kb.next();
         try
         {
@@ -473,6 +559,48 @@ public class MySqlTeamDao extends MySqlDao implements TeamDaoInterface {
             } catch (SQLException e)
             {
                 throw new DaoException("deleteTeamByName() " + e.getMessage());
+            }
+        }
+    }
+
+    @Override
+    public void insertNewTeam(Team t) throws DaoException {
+        try
+        {
+            connection = this.getConnection();
+
+            String query = "insert into teams (name, country, powerUnit, budget, wins) values (?, ?, ?, ?, ?)";
+            ps = connection.prepareStatement(query);
+            ps.setString(1, t.getName());
+            ps.setString(2, t.getCountry());
+            ps.setString(3, t.getPowerUnit());
+            ps.setFloat(4, t.getBudget());
+            ps.setInt(5, t.getWins());
+
+            //Using a PreparedStatement to execute SQL...
+            ps.executeUpdate();
+        } catch (SQLException e)
+        {
+            throw new DaoException("insertNewTeamResultSet() " + e.getMessage());
+        } finally
+        {
+            try
+            {
+                if (resultSet != null)
+                {
+                    resultSet.close();
+                }
+                if (ps != null)
+                {
+                    ps.close();
+                }
+                if (connection != null)
+                {
+                    freeConnection(connection);
+                }
+            } catch (SQLException e)
+            {
+                throw new DaoException("insertNewTeam() " + e.getMessage());
             }
         }
     }

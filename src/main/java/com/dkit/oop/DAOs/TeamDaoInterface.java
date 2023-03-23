@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface TeamDaoInterface
 {
+    Team findTeamById() throws DaoException;
     List<Team> findAllTeams() throws DaoException;
     Team findTeamByName() throws DaoException;
     List<Team> findTeamsByCountry() throws DaoException;
@@ -15,5 +16,7 @@ public interface TeamDaoInterface
     List<Team> findTeamsOverWins() throws DaoException;
     List<Team> findTeamsUnderWins() throws DaoException;
     void deleteTeamByName() throws DaoException;
+    void deleteTeamById() throws DaoException;
+    void insertNewTeam(Team t) throws DaoException;
 
 }
