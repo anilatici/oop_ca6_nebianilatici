@@ -19,8 +19,11 @@ public class App
 /*            System.out.println("\nCall findTeamByName(String name)");
             Team t = ITeamDao.findTeamByName("williams");
             System.out.println(t);*/
-            System.out.println("\nCall findTeamsByCountry(String country)");
+/*            System.out.println("\nCall findTeamsByCountry(String country)");
             List<Team> teams = ITeamDao.findTeamsByCountry("united kingdom");
+            System.out.println(teams);*/
+            System.out.println("\nCall findTeamsByPowerUnit(String powerUnit)");
+            List<Team> teams = ITeamDao.findTeamsByPowerUnit("haas");
             System.out.println(teams);
 
 /*            if(teams.isEmpty() )

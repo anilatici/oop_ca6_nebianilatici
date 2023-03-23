@@ -9,4 +9,5 @@ public interface TeamDaoInterface
     List<Team> findAllTeams() throws DaoException;
     Team findTeamByName(String name) throws DaoException;
     List<Team> findTeamsByCountry(String country) throws DaoException;
+    List<Team> findTeamsByPowerUnit(String powerUnit) throws DaoException;
 }
