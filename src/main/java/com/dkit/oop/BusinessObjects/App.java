@@ -22,31 +22,11 @@ public class App
         System.out.println("5) Find Teams Over Budget");
         System.out.println("6) Find Teams Under Budget");
         System.out.println("7) Find Teams Over Wins");
-        System.out.println("8) Exit");
+        System.out.println("8) Find Teams Under Wins");
+        System.out.println("9) Exit");
         System.out.println("-----------------------------");
         System.out.println("Enter the number of the option you want to select:");
 
-    }
-
-    private static int menuValidation()
-    {
-        Scanner kb = new Scanner(System.in);
-        int menuOption = 0;
-        boolean validInput = false;
-        while (!validInput) {
-            if (kb.hasNextInt()) {
-                menuOption = kb.nextInt();
-                if (menuOption >= 1 && menuOption <= 8) {
-                    validInput = true;
-                } else {
-                    System.out.println("Invalid input. Please enter an integer between 1 and 8.");
-                }
-            } else {
-                System.out.println("Invalid input. Please enter an integer.");
-                kb.next(); // consume the invalid input
-            }
-        }
-        return menuOption;
     }
 
     public static void main(String[] args)
@@ -66,7 +46,7 @@ public class App
                 }
                 menuOption = kb.nextInt();
                 kb.nextLine();
-                if (menuOption < 1 || menuOption > 8) {
+                if (menuOption < 1 || menuOption > 9) {
                     System.out.println("Invalid option, please try again");
                     continue;
                 }
@@ -117,6 +97,11 @@ public class App
                         break;
 
                     case 8:
+                        System.out.println("Displaying Teams Under Wins");
+                        List<Team> teamsUnderWins = ITeamDao.findTeamsUnderWins();
+                        System.out.println(teamsUnderWins+"\n");
+                        break;
+                    case 9:
                         menuLoop = false;
                         break;
 

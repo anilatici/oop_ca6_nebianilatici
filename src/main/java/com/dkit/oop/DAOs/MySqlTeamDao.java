@@ -381,6 +381,61 @@ public class MySqlTeamDao extends MySqlDao implements TeamDaoInterface {
         }
         return teamsList;
     }
+    @Override
+    public List<Team> findTeamsUnderWins() throws DaoException {
+        System.out.println("Enter wins: ");
+        while (!kb.hasNextInt()) { //check if input is an int
+            System.out.println("Invalid input, please enter a number");
+            kb.next();
+        }
+        int teamWins = kb.nextInt();
+        List<Team> teamsList = new ArrayList<>();
+        try
+        {
+            connection = this.getConnection();
+
+            String query = "select * from teams where wins < " + teamWins;
+            ps = connection.prepareStatement(query);
+
+            //Using a PreparedStatement to execute SQL...
+            resultSet = ps.executeQuery();
+            while (resultSet.next())
+            {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                String country = resultSet.getString("country");
+                String powerUnit = resultSet.getString("powerUnit");
+                int wins = resultSet.getInt("wins");
+                float budget = resultSet.getFloat("budget");
+                Team t = new Team(id, name, country, powerUnit, wins, budget);
+                teamsList.add(t);
+            }
+        } catch (SQLException e)
+        {
+            throw new DaoException("findTeamsUnderWinsResultSet() " + e.getMessage());
+        } finally
+        {
+            try
+            {
+                if (resultSet != null)
+                {
+                    resultSet.close();
+                }
+                if (ps != null)
+                {
+                    ps.close();
+                }
+                if (connection != null)
+                {
+                    freeConnection(connection);
+                }
+            } catch (SQLException e)
+            {
+                throw new DaoException("findTeamsUnderWins() " + e.getMessage());
+            }
+        }
+        return teamsList;
+    }
 
 
 }
