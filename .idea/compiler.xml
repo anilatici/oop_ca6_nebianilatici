@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="oop_ca6" />
+        <module name="database-sample-1" />
       </profile>
     </annotationProcessing>
   </component>

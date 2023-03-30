@@ -1,5 +1,6 @@
 package com.dkit.oop.DAOs;
 
+import com.dkit.oop.Comparators.TeamBudgetComparator;
 import com.dkit.oop.DTOs.Team;
 import com.dkit.oop.Exceptions.DaoException;
 import com.sun.tools.jdeprscan.scan.Scan;
@@ -8,9 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 
 public class MySqlTeamDao extends MySqlDao implements TeamDaoInterface {
@@ -603,6 +602,14 @@ public class MySqlTeamDao extends MySqlDao implements TeamDaoInterface {
                 throw new DaoException("insertNewTeam() " + e.getMessage());
             }
         }
+    }
+
+    @Override
+    public List<Team> listTeamsByBudget() throws DaoException {
+        MySqlTeamDao teamDao = new MySqlTeamDao();
+        List<Team> teamsList = teamDao.findAllTeams();
+        teamsList.sort(new TeamBudgetComparator());
+        return teamsList;
     }
 
 

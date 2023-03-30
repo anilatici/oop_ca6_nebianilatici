@@ -18,5 +18,6 @@ public interface TeamDaoInterface
     void deleteTeamByName() throws DaoException;
     void deleteTeamById() throws DaoException;
     void insertNewTeam(Team t) throws DaoException;
+    public List<Team> listTeamsByBudget() throws DaoException;
 
 }

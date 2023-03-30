@@ -55,9 +55,9 @@ public class App
                         break;
 
                     case 4:
-                        System.out.println("Displaying Teams By Power Unit");
-                        List<Team> teamsByPowerUnit = ITeamDao.findTeamsByPowerUnit();
-                        System.out.println(teamsByPowerUnit+"\n");
+                        System.out.println("Listing Teams By Budget");
+                        List<Team> teamsByBudget = ITeamDao.listTeamsByBudget();
+                        System.out.println(teamsByBudget+"\n");
                         break;
 
                     case 5:
