@@ -6,17 +6,17 @@ import java.util.List;
 
 public interface TeamDaoInterface
 {
-    Team findTeamById() throws DaoException;
+    Team findTeamById(int teamID) throws DaoException;
     List<Team> findAllTeams() throws DaoException;
-    Team findTeamByName() throws DaoException;
-    List<Team> findTeamsByCountry() throws DaoException;
-    List<Team> findTeamsByPowerUnit() throws DaoException;
-    List<Team> findTeamsOverBudget() throws DaoException;
-    List<Team> findTeamsUnderBudget() throws DaoException;
-    List<Team> findTeamsOverWins() throws DaoException;
-    List<Team> findTeamsUnderWins() throws DaoException;
-    void deleteTeamByName() throws DaoException;
-    void deleteTeamById() throws DaoException;
+    Team findTeamByName(String teamName) throws DaoException;
+    List<Team> findTeamsByCountry(String teamCountry) throws DaoException;
+    List<Team> findTeamsByPowerUnit(String teamPowerUnit) throws DaoException;
+    List<Team> findTeamsOverBudget(float teamBudget) throws DaoException;
+    List<Team> findTeamsUnderBudget(float teamBudget) throws DaoException;
+    List<Team> findTeamsOverWins(int teamWins) throws DaoException;
+    List<Team> findTeamsUnderWins(int teamWins) throws DaoException;
+    void deleteTeamByName(String teamName) throws DaoException;
+    void deleteTeamById(int teamId) throws DaoException;
     void insertNewTeam(Team t) throws DaoException;
     public List<Team> listTeamsByBudget() throws DaoException;
 

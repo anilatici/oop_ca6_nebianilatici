@@ -13,7 +13,7 @@ import java.util.*;
 
 
 public class MySqlTeamDao extends MySqlDao implements TeamDaoInterface {
-    Scanner kb = new Scanner(System.in);
+
     Connection connection = null;
     PreparedStatement ps = null;
     ResultSet resultSet = null;
@@ -66,13 +66,12 @@ public class MySqlTeamDao extends MySqlDao implements TeamDaoInterface {
                 throw new DaoException("findAllTeams() " + e.getMessage());
             }
         }
+
         return teamsList;     // may be empty
     }
 
     @Override
-    public Team findTeamById() throws DaoException {
-        System.out.println("Enter team ID:");
-        int teamID = kb.nextInt();
+    public Team findTeamById(int teamID) throws DaoException {
         Team t = null;
         try {
             connection = this.getConnection();
@@ -110,9 +109,7 @@ public class MySqlTeamDao extends MySqlDao implements TeamDaoInterface {
         return t;
     }
     @Override
-    public Team findTeamByName() throws DaoException {
-        System.out.println("Enter team name:");
-        String teamName = kb.nextLine();
+    public Team findTeamByName(String teamName) throws DaoException {
         Team t = null;
         try {
             connection = this.getConnection();
@@ -151,9 +148,7 @@ public class MySqlTeamDao extends MySqlDao implements TeamDaoInterface {
     }
 
     @Override
-    public List<Team> findTeamsByCountry() throws DaoException {
-        System.out.println("Enter country:");
-        String teamCountry = kb.nextLine();
+    public List<Team> findTeamsByCountry(String teamCountry) throws DaoException {
         List<Team> teamsList = new ArrayList<>();
         try
         {
@@ -203,9 +198,7 @@ public class MySqlTeamDao extends MySqlDao implements TeamDaoInterface {
     }
 
     @Override
-    public List<Team> findTeamsByPowerUnit() throws DaoException {
-        System.out.println("Enter power unit:");
-        String teamPowerUnit = kb.nextLine();
+    public List<Team> findTeamsByPowerUnit(String teamPowerUnit) throws DaoException {
         List<Team> teamsList = new ArrayList<>();
         try
         {
@@ -255,13 +248,8 @@ public class MySqlTeamDao extends MySqlDao implements TeamDaoInterface {
     }
 
     @Override
-    public List<Team> findTeamsOverBudget() throws DaoException {
-        System.out.println("Enter budget: ");
-        while (!kb.hasNextFloat()) { //check if input is a float
-            System.out.println("Invalid input, please enter a number");
-            kb.nextLine();
-        }
-        float teamBudget = kb.nextFloat();
+    public List<Team> findTeamsOverBudget(float teamBudget) throws DaoException {
+
         List<Team> teamsList = new ArrayList<>();
         try
         {
@@ -310,13 +298,8 @@ public class MySqlTeamDao extends MySqlDao implements TeamDaoInterface {
         return teamsList;
     }
     @Override
-    public List<Team> findTeamsUnderBudget() throws DaoException {
-        System.out.println("Enter budget: ");
-        while (!kb.hasNextFloat()) { //check if input is a float
-            System.out.println("Invalid input, please enter a number");
-            kb.nextLine();
-        }
-        float teamBudget = kb.nextFloat();
+    public List<Team> findTeamsUnderBudget(float teamBudget) throws DaoException {
+
         List<Team> teamsList = new ArrayList<>();
         try
         {
@@ -366,13 +349,8 @@ public class MySqlTeamDao extends MySqlDao implements TeamDaoInterface {
     }
 
     @Override
-    public List<Team> findTeamsOverWins() throws DaoException {
-        System.out.println("Enter wins: ");
-        while (!kb.hasNextInt()) { //check if input is an int
-            System.out.println("Invalid input, please enter a number");
-            kb.next();
-        }
-        int teamWins = kb.nextInt();
+    public List<Team> findTeamsOverWins(int teamWins) throws DaoException {
+
         List<Team> teamsList = new ArrayList<>();
         try
         {
@@ -421,13 +399,8 @@ public class MySqlTeamDao extends MySqlDao implements TeamDaoInterface {
         return teamsList;
     }
     @Override
-    public List<Team> findTeamsUnderWins() throws DaoException {
-        System.out.println("Enter wins: ");
-        while (!kb.hasNextInt()) { //check if input is an int
-            System.out.println("Invalid input, please enter a number");
-            kb.next();
-        }
-        int teamWins = kb.nextInt();
+    public List<Team> findTeamsUnderWins(int teamWins) throws DaoException {
+
         List<Team> teamsList = new ArrayList<>();
         try
         {
@@ -479,13 +452,8 @@ public class MySqlTeamDao extends MySqlDao implements TeamDaoInterface {
 
     //create a function to delete a team from the database table using the team id
     @Override
-    public void deleteTeamById() throws DaoException {
-        System.out.println("Enter team ID again to confirm: ");
-        while (!kb.hasNextInt()) { //check if input is an int
-            System.out.println("Invalid input, please enter a number");
-            kb.next();
-        }
-        int teamId = kb.nextInt();
+    public void deleteTeamById(int teamId) throws DaoException {
+
         try
         {
             connection = this.getConnection();
@@ -523,9 +491,8 @@ public class MySqlTeamDao extends MySqlDao implements TeamDaoInterface {
     }
 
     @Override
-    public void deleteTeamByName() throws DaoException {
-        System.out.println("Enter team name again to confirm: ");
-        String teamName = kb.next();
+    public void deleteTeamByName(String teamName) throws DaoException {
+
         try
         {
             connection = this.getConnection();

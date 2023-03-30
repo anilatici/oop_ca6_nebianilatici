@@ -7,18 +7,19 @@ import com.dkit.oop.Exceptions.DaoException;
 import com.sun.tools.jdeprscan.scan.Scan;
 
 import java.sql.SQLOutput;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 
 public class App
 {
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) throws DaoException {
         App app = new App();
         start();
     }
 
-    private static void start() {
+    private static void start() throws DaoException {
         Scanner kb = new Scanner(System.in);
         TeamDaoInterface ITeamDao = new MySqlTeamDao();
         boolean menuLoop = true;
@@ -62,26 +63,20 @@ public class App
 
                     case 5:
                         System.out.println("Displaying Teams Over Budget");
-                        List<Team> teamsOverBudget = ITeamDao.findTeamsOverBudget();
-                        System.out.println(teamsOverBudget+"\n");
                         break;
 
                     case 6:
                         System.out.println("Displaying Teams Under Budget");
-                        List<Team> teamsUnderBudget = ITeamDao.findTeamsUnderBudget();
-                        System.out.println(teamsUnderBudget+"\n");
                         break;
 
                     case 7:
                         System.out.println("Displaying Teams Over Wins");
-                        List<Team> teamsOverWins = ITeamDao.findTeamsOverWins();
-                        System.out.println(teamsOverWins+"\n");
+
                         break;
 
                     case 8:
                         System.out.println("Displaying Teams Under Wins");
-                        List<Team> teamsUnderWins = ITeamDao.findTeamsUnderWins();
-                        System.out.println(teamsUnderWins+"\n");
+
                         break;
                     case 9:
                         menuLoop = false;
@@ -245,49 +240,89 @@ public class App
 
                     case 2:
                         System.out.println("Displaying Team By ID");
-                        Team t = ITeamDao.findTeamById();
+                        HashSet<Integer> teamIdCache = new HashSet<Integer>();
+                        List<Team> teams = ITeamDao.findAllTeams();
+                        for (Team t : teams) {
+                            teamIdCache.add(t.getId());
+                        }
+                        System.out.println("Enter team ID: ");
+                        int teamID = kb.nextInt();
+                        if (!teamIdCache.contains(teamID)) {
+                            System.out.println("Team ID does not exist. Please enter a valid team ID.");
+                        }
+                        Team t = ITeamDao.findTeamById(teamID);
                         System.out.println(t + "\n");
                         break;
 
                     case 3:
                         System.out.println("Displaying Team By Name");
-                        Team t1 = ITeamDao.findTeamByName();
+                        System.out.println("Enter team name:");
+                        String teamName = kb.nextLine();
+                        Team t1 = ITeamDao.findTeamByName(teamName);
                         System.out.println(t1 + "\n");
                         break;
 
                     case 4:
                         System.out.println("Displaying Teams By Country");
-                        List<Team> teamsByCountry = ITeamDao.findTeamsByCountry();
+                        System.out.println("Enter country:");
+                        String teamCountry = kb.nextLine();
+                        List<Team> teamsByCountry = ITeamDao.findTeamsByCountry(teamCountry);
                         System.out.println(teamsByCountry + "\n");
                         break;
 
                     case 5:
                         System.out.println("Displaying Teams By Power Unit");
-                        List<Team> teamsByPowerUnit = ITeamDao.findTeamsByPowerUnit();
+                        System.out.println("Enter power unit:");
+                        String teamPowerUnit = kb.nextLine();
+                        List<Team> teamsByPowerUnit = ITeamDao.findTeamsByPowerUnit(teamPowerUnit);
                         System.out.println(teamsByPowerUnit + "\n");
                         break;
 
                     case 6:
                         System.out.println("Displaying Teams Over Budget");
-                        List<Team> teamsOverBudget = ITeamDao.findTeamsOverBudget();
+                        System.out.println("Enter budget: ");
+                        while (!kb.hasNextFloat()) { //check if input is a float
+                            System.out.println("Invalid input, please enter a number");
+                            kb.nextLine();
+                        }
+                        float teamBudget = kb.nextFloat();
+                        List<Team> teamsOverBudget = ITeamDao.findTeamsOverBudget(teamBudget);
                         System.out.println(teamsOverBudget + "\n");
                         break;
 
                     case 7:
                         System.out.println("Displaying Teams Under Budget");
-                        List<Team> teamsUnderBudget = ITeamDao.findTeamsUnderBudget();
+                        System.out.println("Enter budget: ");
+                        while (!kb.hasNextFloat()) { //check if input is a float
+                            System.out.println("Invalid input, please enter a number");
+                            kb.nextLine();
+                        }
+                        float teamBudget1 = kb.nextFloat();
+                        List<Team> teamsUnderBudget = ITeamDao.findTeamsUnderBudget(teamBudget1);
                         System.out.println(teamsUnderBudget + "\n");
                         break;
 
                     case 8:
                         System.out.println("Displaying Teams Over Wins");
-                        List<Team> teamsOverWins = ITeamDao.findTeamsOverWins();
+                        System.out.println("Enter wins: ");
+                        while (!kb.hasNextInt()) { //check if input is an int
+                            System.out.println("Invalid input, please enter a number");
+                            kb.next();
+                        }
+                        int teamWins = kb.nextInt();
+                        List<Team> teamsOverWins = ITeamDao.findTeamsOverWins(teamWins);
                         System.out.println(teamsOverWins + "\n");
                         break;
 
                     case 9:
+                        System.out.println("Enter wins: ");
+                        while (!kb.hasNextInt()) { //check if input is an int
+                            System.out.println("Invalid input, please enter a number");
+                            kb.next();
+                        }
+                        int teamWins1 = kb.nextInt();
                         System.out.println("Displaying Teams Under Wins");
-                        List<Team> teamsUnderWins = ITeamDao.findTeamsUnderWins();
+                        List<Team> teamsUnderWins = ITeamDao.findTeamsUnderWins(teamWins1);
                         System.out.println(teamsUnderWins + "\n");
                         break;
 
@@ -336,11 +371,13 @@ public class App
                 switch (deleteOption) {
                     case 1:
                         System.out.println("Deleting Team By ID");
-                        Team t = ITeamDao.findTeamById();
+                        System.out.println("Enter team ID:");
+                        int teamID = kb.nextInt();
+                        Team t = ITeamDao.findTeamById(teamID);
                         System.out.println("Are you sure that you want to delete " + t.getName() + "?");
                         if (kb.nextLine().equalsIgnoreCase("yes"))
                         {
-                            ITeamDao.deleteTeamById();
+                            ITeamDao.deleteTeamById(teamID);
                             System.out.println(t + " has been deleted");
                             break;
                         }
@@ -354,11 +391,13 @@ public class App
 
                     case 2:
                         System.out.println("Deleting Teams By Name");
-                        Team t1 = ITeamDao.findTeamByName();
+                        System.out.println("Enter team name:");
+                        String teamName = kb.nextLine();
+                        Team t1 = ITeamDao.findTeamByName(teamName);
                         System.out.println("Are you sure that you want to delete " + t1.getName() + "?");
                         if (kb.nextLine().equalsIgnoreCase("yes"))
                         {
-                            ITeamDao.deleteTeamByName();
+                            ITeamDao.deleteTeamByName(teamName);
                             System.out.println(t1 + " has been deleted");
                             break;
                         }
