@@ -184,7 +184,9 @@ public class App
             }
         }
 
-        return new Team(teamName, teamCountry, teamPowerUnit, teamWins, teamBudget);
+        Team t1 = new Team(teamName, teamCountry, teamPowerUnit, teamWins, teamBudget);
+        System.out.println("Team created: " + t1.toString());
+        return t1;
     }
 
     private static void menuPrint()
@@ -245,11 +247,16 @@ public class App
                         for (Team t : teams) {
                             teamIdCache.add(t.getId());
                         }
-                        System.out.println("Enter team ID: ");
-                        int teamID = kb.nextInt();
-                        if (!teamIdCache.contains(teamID)) {
-                            System.out.println("Team ID does not exist. Please enter a valid team ID.");
-                        }
+
+                        int teamID;
+                        do {
+                            System.out.println("Enter team ID: ");
+                            teamID = kb.nextInt();
+                            if (!teamIdCache.contains(teamID)) {
+                                System.out.println("Team ID does not exist. Please enter a valid team ID.");
+                            }
+                        } while (!teamIdCache.contains(teamID));
+
                         Team t = ITeamDao.findTeamById(teamID);
                         System.out.println(t + "\n");
                         break;
