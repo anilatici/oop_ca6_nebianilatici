@@ -327,9 +327,12 @@ public class App
                         writer.write("Find Team By ID: "+jsonQuery + "\n");
                         writer.flush();
 
+                        // read response from server
+                        String response = bufferedReader.readLine();
+                        Team team = gson.fromJson(response, Team.class);
+                        System.out.println(team);
 
-                        Team t = ITeamDao.findTeamById(query);
-                        System.out.println(t + "\n");
+
                         break;
 
                     case 3:
