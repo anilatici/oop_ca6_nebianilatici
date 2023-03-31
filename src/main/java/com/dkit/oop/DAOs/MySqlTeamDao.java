@@ -3,8 +3,10 @@ package com.dkit.oop.DAOs;
 import com.dkit.oop.Comparators.TeamBudgetComparator;
 import com.dkit.oop.DTOs.Team;
 import com.dkit.oop.Exceptions.DaoException;
+import com.dkit.oop.Query;
 import com.sun.tools.jdeprscan.scan.Scan;
-
+import java.util.List;
+import java.util.Objects;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -71,12 +73,15 @@ public class MySqlTeamDao extends MySqlDao implements TeamDaoInterface {
     }
 
     @Override
-    public Team findTeamById(int teamID) throws DaoException {
+    public Team findTeamById(Query query) throws DaoException {
         Team t = null;
+        String sql = query.getSql();
+        String params = query.getParameters();
+
+        String sqlQuery = sql + params;
         try {
-            connection = this.getConnection();
-            String query = "select * from teams where id = " + teamID;
-            ps = connection.prepareStatement(query);
+            connection = this.getConnection();;
+            ps = connection.prepareStatement(sqlQuery);
 
             //Using a PreparedStatement to execute SQL...
             resultSet = ps.executeQuery();

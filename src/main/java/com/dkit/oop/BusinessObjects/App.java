@@ -4,13 +4,17 @@ import com.dkit.oop.DAOs.MySqlTeamDao;
 import com.dkit.oop.DAOs.TeamDaoInterface;
 import com.dkit.oop.DTOs.Team;
 import com.dkit.oop.Exceptions.DaoException;
+import com.dkit.oop.Query;
+import com.google.gson.GsonBuilder;
 import com.sun.tools.jdeprscan.scan.Scan;
 
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLOutput;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
+import java.net.Socket;
 import java.util.Scanner;
+import com.google.gson.Gson;
 
 public class App
 {
@@ -20,6 +24,47 @@ public class App
     }
 
     private static void start() throws DaoException {
+
+
+        Scanner in = new Scanner(System.in);
+
+        /*try {
+            Socket socket = new Socket("localhost", 8080);  // connect to server socket
+            System.out.println("Client: Port# of this client : " + socket.getLocalPort());
+            System.out.println("Client: Port# of Server :" + socket.getPort() );
+
+            System.out.println("Client message: The Client is running and has connected to the server");
+
+            System.out.println("Please enter a command:  (\"Time\" to get time, or \"Echo message\" to get echo) \n>");
+            String command = in.nextLine();
+
+            OutputStream os = socket.getOutputStream();
+            PrintWriter socketWriter = new PrintWriter(os, true);   // true => auto flush buffers
+
+            socketWriter.println(command);
+
+            Scanner socketReader = new Scanner(socket.getInputStream());  // wait for, and retrieve the reply
+
+            if(command.startsWith("Time"))   //we expect the server to return a time
+            {
+                String timeString = socketReader.nextLine();
+                System.out.println("Client message: Response from server Time: " + timeString);
+            }
+            else                            // the user has entered the Echo command or an invalid command
+            {
+                String input = socketReader.nextLine();
+                System.out.println("Client message: Response from server: \"" + input + "\"");
+            }
+
+            socketWriter.close();
+            socketReader.close();
+            socket.close();
+
+        } catch (IOException e) {
+            System.out.println("Client message: IOException: "+e);
+        }*/
+
+
         Scanner kb = new Scanner(System.in);
         TeamDaoInterface ITeamDao = new MySqlTeamDao();
         boolean menuLoop = true;
@@ -97,6 +142,8 @@ public class App
         catch( DaoException e )
         {
             e.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -201,8 +248,19 @@ public class App
         System.out.println("Enter the number of the option you want to select:");
 
     }
-    public static void menuDisplayOptions ()
-    {
+    public static void menuDisplayOptions () throws IOException {
+        Socket socket = new Socket("localhost", 8080);
+
+        OutputStream outputStream = socket.getOutputStream();
+        InputStream inputStream = socket.getInputStream();
+
+        Writer writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8);
+        Reader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+
+        BufferedReader bufferedReader = new BufferedReader(reader);
+
+
+
         boolean menuLoop = true;
         Scanner kb = new Scanner(System.in);
         TeamDaoInterface ITeamDao = new MySqlTeamDao();
@@ -242,6 +300,7 @@ public class App
 
                     case 2:
                         System.out.println("Displaying Team By ID");
+
                         HashSet<Integer> teamIdCache = new HashSet<Integer>();
                         List<Team> teams = ITeamDao.findAllTeams();
                         for (Team t : teams) {
@@ -257,7 +316,19 @@ public class App
                             }
                         } while (!teamIdCache.contains(teamID));
 
-                        Team t = ITeamDao.findTeamById(teamID);
+                        String sql = "SELECT * FROM teams WHERE id = ";
+                        String parameters = Integer.toString(teamID);
+                        Query query = new Query(sql, parameters);
+
+                        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+
+                        String jsonQuery = gson.toJson(query);
+
+                        writer.write("Find Team By ID: "+jsonQuery + "\n");
+                        writer.flush();
+
+
+                        Team t = ITeamDao.findTeamById(query);
                         System.out.println(t + "\n");
                         break;
 
@@ -380,7 +451,9 @@ public class App
                         System.out.println("Deleting Team By ID");
                         System.out.println("Enter team ID:");
                         int teamID = kb.nextInt();
-                        Team t = ITeamDao.findTeamById(teamID);
+                        Query query = new Query("SELECT * FROM team WHERE team_id = ?", Integer.toString(teamID));
+
+                        Team t = ITeamDao.findTeamById(query);
                         System.out.println("Are you sure that you want to delete " + t.getName() + "?");
                         if (kb.nextLine().equalsIgnoreCase("yes"))
                         {
