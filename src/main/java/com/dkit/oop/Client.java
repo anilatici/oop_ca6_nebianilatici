@@ -28,7 +28,7 @@ public class Client {
             String command = in.nextLine();
 
             OutputStream os = socket.getOutputStream();
-            PrintWriter socketWriter = new PrintWriter(os, true);   // true => auto flush buffers
+            PrintWriter socketWriter = new PrintWriter(os, true);
 
             socketWriter.println(command);
 

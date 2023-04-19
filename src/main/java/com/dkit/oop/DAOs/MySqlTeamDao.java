@@ -24,12 +24,12 @@ public class MySqlTeamDao extends MySqlDao implements TeamDaoInterface {
     public List<Team> findAllTeams() throws DaoException {
 
         List<Team> teamsList = new ArrayList<>();
+        String sqlQuery = "select * from teams";
         try
         {
             connection = this.getConnection();
 
-            String query = "select * from teams";
-            ps = connection.prepareStatement(query);
+            ps = connection.prepareStatement(sqlQuery);
 
             //Using a PreparedStatement to execute SQL...
             resultSet = ps.executeQuery();

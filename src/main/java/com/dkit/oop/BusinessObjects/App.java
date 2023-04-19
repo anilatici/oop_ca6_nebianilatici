@@ -6,6 +6,8 @@ import com.dkit.oop.DTOs.Team;
 import com.dkit.oop.Exceptions.DaoException;
 import com.dkit.oop.Query;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import com.mysql.cj.interceptors.QueryInterceptor;
 import com.sun.tools.jdeprscan.scan.Scan;
 
 import java.io.*;
@@ -263,6 +265,7 @@ public class App
 
         boolean menuLoop = true;
         Scanner kb = new Scanner(System.in);
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         TeamDaoInterface ITeamDao = new MySqlTeamDao();
         int displayOption = 0;
         try{
@@ -294,16 +297,31 @@ public class App
                 switch (displayOption) {
                     case 1:
                         System.out.println("Displaying All Teams");
-                        List<Team> teamsAll = ITeamDao.findAllTeams();
-                        System.out.println(teamsAll + "\n");
+                        //String sqlDisplayAllteams = "SELECT * FROM teams";
+                        String sqlDisplayAllteams = "FIND_ALL_TEAMS\n";  // command
+
+
+                        Query query = new Query(sqlDisplayAllteams, null);
+
+                        String json = gson.toJson(query);
+                        writer.write(sqlDisplayAllteams);
+                        writer.flush();
+
+                        // read response from server
+                        String response = bufferedReader.readLine();
+                        List<Team> teams = gson.fromJson(response, new TypeToken<List<Team>>(){}.getType());
+
+
+                        System.out.println(teams + "\n");
                         break;
 
                     case 2:
                         System.out.println("Displaying Team By ID");
 
                         HashSet<Integer> teamIdCache = new HashSet<Integer>();
-                        List<Team> teams = ITeamDao.findAllTeams();
-                        for (Team t : teams) {
+
+                        List<Team> team = ITeamDao.findAllTeams();
+                        for (Team t : team) {
                             teamIdCache.add(t.getId());
                         }
 
@@ -318,18 +336,18 @@ public class App
 
                         String sql = "SELECT * FROM teams WHERE id = ";
                         String parameters = Integer.toString(teamID);
-                        Query query = new Query(sql, parameters);
+                        Query queryDisplayTeamById = new Query(sql, parameters);
 
-                        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
-                        String jsonQuery = gson.toJson(query);
+
+                        String jsonQuery = gson.toJson(queryDisplayTeamById);
 
                         writer.write("Find Team By ID: "+jsonQuery + "\n");
                         writer.flush();
 
                         // read response from server
-                        String response = bufferedReader.readLine();
-                        Team team = gson.fromJson(response, Team.class);
+                        String response1 = bufferedReader.readLine();
+                        Team team1 = gson.fromJson(response1, Team.class);
                         System.out.println(team);
 
 

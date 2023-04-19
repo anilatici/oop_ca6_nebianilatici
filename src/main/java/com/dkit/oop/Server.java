@@ -14,6 +14,7 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 
 public class Server {
     public static void main(String[] args) {
@@ -84,10 +85,14 @@ public class Server {
                 while ((message = socketReader.readLine()) != null)
                 {
                     System.out.println("Server: (ClientHandler): Read command from client " + clientNumber + ": " + message);
-                    if (message.startsWith("Echo"))
+                    if (message.startsWith("FIND_ALL_TEAMS"))
                     {
-                        message = message.substring(5); // strip off the 'Echo ' part
-                        socketWriter.println(message);  // send message to client
+
+                        System.out.println("Received message: " + message); // debug statement
+
+                        List<Team> teams = serverDao.findAllTeams();
+                        String jsonTeams = gson.toJson(teams);
+                        socketWriter.println(jsonTeams);
                     }
                     else if (message.startsWith("Find Team By ID:"))
                     {
